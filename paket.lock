@@ -1,0 +1,16 @@
+NUGET
+  remote: https://nuget.org/api/v2
+  specs:
+    FluentCommandLineParser (1.4.3)
+    Newtonsoft.Json (8.0.2)
+  remote: https://www.myget.org/F/jakobsson/auth/b0e230b6-1bdb-4321-b6b8-5badc503887f/api/v2
+  specs:
+    JaJo.Projects.Templating (1.0.0.19)
+    SuperGlue.Configuration (1.0.0.287)
+      Newtonsoft.Json
+    SuperGlue.Web.Assets (1.0.0.287)
+      SuperGlue.Configuration
+      SuperGlue.Web.Output
+    SuperGlue.Web.Output (1.0.0.287)
+      Newtonsoft.Json
+      SuperGlue.Configuration
