@@ -13,12 +13,12 @@ namespace SuperGlue
         private readonly string _environment;
         private readonly string _source;
         private readonly string _destination;
-        private readonly IEnumerable<IApplicationHost> _hosts;
+        private readonly IEnumerable<ApplicationHost> _hosts;
         private readonly ICollection<FileListener> _fileListeners = new List<FileListener>();
         private AppDomain _appDomain;
         private RemoteBootstrapper _bootstrapper;
 
-        public RunnableApplication(string environment, string source, string destination, IEnumerable<IApplicationHost> hosts)
+        public RunnableApplication(string environment, string source, string destination, IEnumerable<ApplicationHost> hosts)
         {
             _environment = environment;
             _source = source;

@@ -5,7 +5,7 @@ var buildNumber = Argument<string>("buildnumber", "0");
 var solutions = GetFiles("./**/*.sln");
 var solutionPaths = solutions.Select(solution => solution.GetDirectory());
 
-var version = "1.0.0";
+var version = "1.1.0";
 var packageVersion = string.Format("{0}.{1}", version, buildNumber);
 
 Task("Clean")

@@ -3,4 +3,5 @@ source https://www.myget.org/F/jakobsson/auth/b0e230b6-1bdb-4321-b6b8-5badc50388
 nuget FluentCommandLineParser
 nuget JaJo.Projects.Templating
 nuget SuperGlue.Configuration
+nuget SuperGlue.Hosting.Katana
 nuget SuperGlue.Web.Assets

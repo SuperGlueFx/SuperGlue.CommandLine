@@ -11,11 +11,6 @@ namespace SuperGlue
 {
     public class RunCommand : ICommand
     {
-        private static readonly IDictionary<string, Func<RunCommand, IApplicationHost>> AppHostFactories = new Dictionary<string, Func<RunCommand, IApplicationHost>>
-        {
-            {"katana", BuildKatanaApplicationHost}
-        };
-
         public RunCommand()
         {
             Hosts = new List<string>();
@@ -28,7 +23,7 @@ namespace SuperGlue
         public async Task Execute()
         {
             var application = new RunnableApplication(Environment, Application, Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "", $"Applications\\{HashUsingSha1(Application)}"),
-                Hosts.Where(x => AppHostFactories.ContainsKey(x)).Select(x => AppHostFactories[x](this)).ToList());
+                Hosts.Select(x => new ApplicationHost(x)).ToList());
 
             await application.Start();
 
@@ -55,11 +50,6 @@ namespace SuperGlue
             var passwordBytes = Encoding.ASCII.GetBytes(input);
             var passwordHash = hasher.ComputeHash(passwordBytes);
             return Convert.ToBase64String(passwordHash);
-        }
-
-        private static KatanaApplicationHost BuildKatanaApplicationHost(RunCommand command)
-        {
-            return new KatanaApplicationHost(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "");
         }
     }
 }
