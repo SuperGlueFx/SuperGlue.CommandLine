@@ -1,6 +1,7 @@
 var target = Argument<string>("target", "Default");
 var configuration = Argument<string>("configuration", "Debug");
 var buildNumber = Argument<string>("buildnumber", "0");
+var nugetApiKey = Argument<string>("nugetApiKey", "");
 
 var solutions = GetFiles("./**/*.sln");
 var solutionPaths = solutions.Select(solution => solution.GetDirectory());
@@ -78,6 +79,22 @@ Task("PaketPack")
 		}
 	});
 
+Task("PaketPush")
+	.IsDependentOn("PaketPack")
+	.Does(() => {
+		var packages = System.IO.Directory.GetFiles("./build", "*.nupkg");
+
+		foreach(var package in packages)
+		{
+			using(var process = StartAndReturnProcess("./.paket/paket.exe", new ProcessSettings { Arguments = "push url https://www.myget.org/F/jajo file \"" + package + "\" apikey " + nugetApiKey }))
+			{
+				Information("Pushing packages");
+				process.WaitForExit();
+				Information("Exit code: {0}", process.GetExitCode());
+			}	
+		}
+	});
+
 Task("Test")
 	.IsDependentOn("Build")
 	.Does(() => {
@@ -91,7 +108,7 @@ Task("Default")
 
 Task("ci")
 	.IsDependentOn("Test")
-	.IsDependentOn("PaketPack")
+	.IsDependentOn("PaketPush")
 	.Does(() => {
 		if(TeamCity.IsRunningOnTeamCity)
 		{
