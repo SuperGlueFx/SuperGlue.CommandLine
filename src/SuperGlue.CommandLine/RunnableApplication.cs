@@ -29,7 +29,7 @@ namespace SuperGlue
         public async Task Start()
         {
             if (_appDomain != null || _bootstrapper != null)
-                await Stop();
+                await Stop().ConfigureAwait(false);
 
             StopListeners();
 
@@ -39,7 +39,7 @@ namespace SuperGlue
             DirectoryCopy(_source, _destination);
 
             foreach (var host in _hosts)
-                await host.Prepare(_destination);
+                await host.Prepare(_destination).ConfigureAwait(false);
 
             TransformConfigurationsIn(_destination, ".config", _environment);
             TransformConfigurationsIn(_destination, ".xml", _environment);
@@ -81,7 +81,7 @@ namespace SuperGlue
             }
 
             foreach (var host in _hosts)
-                await host.TearDown(_destination);
+                await host.TearDown(_destination).ConfigureAwait(false);
 
             if (Directory.Exists(_destination))
                 new DirectoryInfo(_destination).DeleteDirectoryAndChildren();
@@ -89,8 +89,8 @@ namespace SuperGlue
 
         public async Task Recycle()
         {
-            await Stop();
-            await Start();
+            await Stop().ConfigureAwait(false);
+            await Start().ConfigureAwait(false);
         }
 
         private void StopListeners()

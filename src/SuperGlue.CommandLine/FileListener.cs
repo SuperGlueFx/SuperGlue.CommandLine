@@ -9,8 +9,7 @@ namespace SuperGlue
 
         public void StartListening(string directory, string filter, Action<string> updated)
         {
-            if (_fileSystemWatcher != null)
-                _fileSystemWatcher.Dispose();
+            _fileSystemWatcher?.Dispose();
 
             _fileSystemWatcher = new FileSystemWatcher(directory, filter)
             {

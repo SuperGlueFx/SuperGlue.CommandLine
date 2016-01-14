@@ -25,7 +25,7 @@ namespace SuperGlue
             var application = new RunnableApplication(Environment, Application, Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "", $"Applications\\{HashUsingSha1(Application)}"),
                 Hosts.Select(x => new ApplicationHost(x)).ToList());
 
-            await application.Start();
+            await application.Start().ConfigureAwait(false);
 
             var key = Console.ReadKey();
 
@@ -36,12 +36,12 @@ namespace SuperGlue
 
                 Console.WriteLine();
 
-                await application.Recycle();
+                await application.Recycle().ConfigureAwait(false);
 
                 key = Console.ReadKey();
             }
 
-            await application.Stop();
+            await application.Stop().ConfigureAwait(false);
         }
 
         private static string HashUsingSha1(string input)

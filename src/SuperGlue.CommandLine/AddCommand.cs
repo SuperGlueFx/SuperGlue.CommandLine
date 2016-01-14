@@ -33,7 +33,7 @@ namespace SuperGlue
 
             if (!string.IsNullOrEmpty(projectDirectory))
             {
-                await engine.RunTemplate(new ProjectTemplateType(Name, Solution, Location, Path.Combine(Location, $"src\\{Name}"), ProjectGuid, substitutions), projectDirectory);
+                await engine.RunTemplate(new ProjectTemplateType(Name, Solution, Location, Path.Combine(Location, $"src\\{Name}"), ProjectGuid, substitutions), projectDirectory).ConfigureAwait(false);
 
                 await new AlterCommand
                 {
@@ -42,7 +42,7 @@ namespace SuperGlue
                     Location = Location,
                     TemplatePaths = TemplatePaths,
                     Template = Template
-                }.Execute();
+                }.Execute().ConfigureAwait(false);
             }
         }
     }
@@ -71,7 +71,7 @@ namespace SuperGlue
             });
 
             foreach (var alterationDirectory in alterationDirectories)
-                await engine.RunTemplate(new AlterationTemplateType(Name, Location, Path.Combine($"src\\{Name}"), substitutions), alterationDirectory);
+                await engine.RunTemplate(new AlterationTemplateType(Name, Location, Path.Combine($"src\\{Name}"), substitutions), alterationDirectory).ConfigureAwait(false);
         }
     }
 }

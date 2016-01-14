@@ -38,7 +38,7 @@ namespace SuperGlue
                 {"PROJECT_GUID", ProjectGuid}
             });
 
-            await engine.RunTemplate(new SolutionTemplateType(Name, Path.Combine(Location, Name), substitutions), baseDirectory);
+            await engine.RunTemplate(new SolutionTemplateType(Name, Path.Combine(Location, Name), substitutions), baseDirectory).ConfigureAwait(false);
 
             await new AddCommand
             {
@@ -48,7 +48,7 @@ namespace SuperGlue
                 Template = Template,
                 Solution = $"src\\{Name}.sln",
                 ProjectGuid = ProjectGuid
-            }.Execute();
+            }.Execute().ConfigureAwait(false);
         }
     }
 }
