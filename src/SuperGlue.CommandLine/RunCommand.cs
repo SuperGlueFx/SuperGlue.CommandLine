@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -46,15 +43,6 @@ namespace SuperGlue
             await Task.WhenAll(applications.Select(x => x.Stop())).ConfigureAwait(false);
         }
 
-        private static string ToRepeatableFolderName(string input)
-        {
-            var hasher = new SHA1Managed();
-            var bytes = Encoding.ASCII.GetBytes(input);
-            var hash = hasher.ComputeHash(bytes);
-
-            return Regex.Replace(Convert.ToBase64String(hash), @"[^a-zÂ‰ˆ¯ÊA-Z≈ƒ÷ÿ∆0-9!@#\-]+", "");
-        }
-
         private IEnumerable<RunnableApplication> GetApplications()
         {
             if (string.IsNullOrEmpty(ConfigFile))
@@ -75,8 +63,34 @@ namespace SuperGlue
 
         private RunnableApplication CreateApplication(string application, IEnumerable<string> hosts)
         {
+            var applicationName = GetApplicationName(application);
+
             return new RunnableApplication(Environment, application, Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "",
-                    $"Applications\\{ToRepeatableFolderName(application)}"), hosts.Select(x => new ApplicationHost(x)).ToList());
+                    $"Applications\\{applicationName}"), applicationName, hosts.Select(x => new ApplicationHost(x)).ToList());
+        }
+
+        private static string GetApplicationName(string path)
+        {
+            var invalidPaths = new List<string>
+            {
+                "bin", "obj", "debug", "release"
+            };
+
+            var currentPath = path;
+            var name = Path.GetFileName(currentPath);
+
+            while (true)
+            {
+                if (!invalidPaths.Any(x => x.Equals(name, StringComparison.InvariantCultureIgnoreCase)))
+                    return name;
+
+                currentPath = Path.GetDirectoryName(currentPath);
+
+                name = Path.GetFileName(currentPath);
+
+                if (string.IsNullOrEmpty(currentPath) || string.IsNullOrEmpty(name))
+                    return "Default";
+            }
         }
 
         public class ApplicationsConfig

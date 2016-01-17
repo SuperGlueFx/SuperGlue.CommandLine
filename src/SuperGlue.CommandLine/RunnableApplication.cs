@@ -13,17 +13,19 @@ namespace SuperGlue
         private readonly string _environment;
         private readonly string _source;
         private readonly string _destination;
+        private readonly string _applicationName;
         private readonly IEnumerable<ApplicationHost> _hosts;
         private readonly ICollection<FileListener> _fileListeners = new List<FileListener>();
         private AppDomain _appDomain;
         private RemoteBootstrapper _bootstrapper;
 
-        public RunnableApplication(string environment, string source, string destination, IEnumerable<ApplicationHost> hosts)
+        public RunnableApplication(string environment, string source, string destination, string applicationName, IEnumerable<ApplicationHost> hosts)
         {
             _environment = environment;
             _source = source;
             _destination = destination;
             _hosts = hosts;
+            _applicationName = applicationName;
         }
 
         public async Task Start()
@@ -46,7 +48,7 @@ namespace SuperGlue
 
             _appDomain = AppDomain.CreateDomain(Guid.NewGuid().ToString(), null, new AppDomainSetup
             {
-                ConfigurationFile = "App.config",
+                ConfigurationFile = $"{_applicationName}.dll.config",
                 PrivateBinPath = _destination,
                 ApplicationBase = _destination
             });
