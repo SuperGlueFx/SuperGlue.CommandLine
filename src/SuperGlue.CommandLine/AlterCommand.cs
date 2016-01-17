@@ -35,7 +35,7 @@ namespace SuperGlue
             });
 
             foreach (var alterationDirectory in alterationDirectories)
-                await engine.RunTemplate(new AlterationTemplateType(Name, Location, Path.Combine($"src\\{Name}"), substitutions), alterationDirectory).ConfigureAwait(false);
+                await engine.RunTemplate(new AlterationTemplateType(Name, Location, Path.Combine(Location, $"src\\{Name}"), substitutions), alterationDirectory).ConfigureAwait(false);
         }
     }
 }
