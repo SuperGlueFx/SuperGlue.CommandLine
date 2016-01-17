@@ -13,6 +13,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{7611DBCF
 		..\paket.lock = ..\paket.lock
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SuperGlue.Consul", "SuperGlue.Consul", "{6234F600-6F4A-4AA2-ABF0-EA0E920D4627}"
+	ProjectSection(SolutionItems) = preProject
+		SuperGlue.Consul\paket.template = SuperGlue.Consul\paket.template
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SuperGlue.Nginx", "SuperGlue.Nginx", "{1712F54F-5DEA-47AC-B59B-5C7DE087580D}"
+	ProjectSection(SolutionItems) = preProject
+		SuperGlue.Nginx\paket.template = SuperGlue.Nginx\paket.template
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
