@@ -92,6 +92,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AddCommand.cs" />
+    <Compile Include="AlterCommand.cs" />
     <Compile Include="ApplicationHost.cs" />
     <Compile Include="NewCommand.cs" />
     <Compile Include="BuildAssetsCommand.cs" />
