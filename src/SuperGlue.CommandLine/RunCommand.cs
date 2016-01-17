@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SuperGlue
 {
@@ -18,15 +19,15 @@ namespace SuperGlue
         }
 
         public string Application { get; set; }
+        public string ConfigFile { get; set; }
         public string Environment { get; set; }
         public ICollection<string> Hosts { get; set; }
 
         public async Task Execute()
         {
-            var application = new RunnableApplication(Environment, Application, Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "", $"Applications\\{ToRepeatableFolerName(Application)}"),
-                Hosts.Select(x => new ApplicationHost(x)).ToList());
+            var applications = GetApplications().ToList();
 
-            await application.Start().ConfigureAwait(false);
+            await Task.WhenAll(applications.Select(x => x.Start())).ConfigureAwait(false);
 
             var key = Console.ReadKey();
 
@@ -37,21 +38,51 @@ namespace SuperGlue
 
                 Console.WriteLine();
 
-                await application.Recycle().ConfigureAwait(false);
+                await Task.WhenAll(applications.Select(x => x.Recycle())).ConfigureAwait(false);
 
                 key = Console.ReadKey();
             }
 
-            await application.Stop().ConfigureAwait(false);
+            await Task.WhenAll(applications.Select(x => x.Stop())).ConfigureAwait(false);
         }
 
-        private static string ToRepeatableFolerName(string input)
+        private static string ToRepeatableFolderName(string input)
         {
             var hasher = new SHA1Managed();
             var bytes = Encoding.ASCII.GetBytes(input);
             var hash = hasher.ComputeHash(bytes);
 
             return Regex.Replace(Convert.ToBase64String(hash), @"[^a-zÂ‰ˆ¯ÊA-Z≈ƒ÷ÿ∆0-9!@#\-]+", "");
+        }
+
+        private IEnumerable<RunnableApplication> GetApplications()
+        {
+            if (string.IsNullOrEmpty(ConfigFile))
+            {
+                yield return CreateApplication(Application, Hosts);
+
+                yield break;
+            }
+
+            if(!File.Exists(ConfigFile))
+                yield break;
+
+            var configuration = JsonConvert.DeserializeObject<IEnumerable<ApplicationsConfig>>(File.ReadAllText(ConfigFile));
+
+            foreach (var application in configuration)
+                yield return CreateApplication(application.Path, application.Hosts);
+        }
+
+        private RunnableApplication CreateApplication(string application, IEnumerable<string> hosts)
+        {
+            return new RunnableApplication(Environment, application, Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "",
+                    $"Applications\\{ToRepeatableFolderName(application)}"), hosts.Select(x => new ApplicationHost(x)).ToList());
+        }
+
+        public class ApplicationsConfig
+        {
+            public string Path { get; set; }
+            public IEnumerable<string> Hosts { get; set; }
         }
     }
 }

@@ -177,6 +177,10 @@ namespace SuperGlue
                 .SetDefault(Environment.CurrentDirectory);
 
             parser
+                .Setup<string>('c', "config")
+                .Callback(x => command.ConfigFile = x);
+
+            parser
                 .Setup<string>('e', "environment")
                 .Callback(x => command.Environment = x)
                 .SetDefault("local");
