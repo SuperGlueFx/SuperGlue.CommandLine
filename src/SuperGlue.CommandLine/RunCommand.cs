@@ -70,7 +70,7 @@ namespace SuperGlue
             var configuration = JsonConvert.DeserializeObject<IEnumerable<ApplicationsConfig>>(File.ReadAllText(ConfigFile));
 
             foreach (var application in configuration)
-                yield return CreateApplication(application.Path, application.Hosts);
+                yield return CreateApplication(application.Path, application.Hosts ?? new List<string>());
         }
 
         private RunnableApplication CreateApplication(string application, IEnumerable<string> hosts)
