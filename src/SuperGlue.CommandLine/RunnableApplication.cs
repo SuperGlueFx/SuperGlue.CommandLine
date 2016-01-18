@@ -15,16 +15,18 @@ namespace SuperGlue
         private readonly string _destination;
         private readonly string _applicationName;
         private readonly IEnumerable<ApplicationHost> _hosts;
+        private readonly IEnumerable<string> _nodeTypes;
         private readonly ICollection<FileListener> _fileListeners = new List<FileListener>();
         private AppDomain _appDomain;
         private RemoteBootstrapper _bootstrapper;
 
-        public RunnableApplication(string environment, string source, string destination, string applicationName, IEnumerable<ApplicationHost> hosts)
+        public RunnableApplication(string environment, string source, string destination, string applicationName, IEnumerable<ApplicationHost> hosts, IEnumerable<string> nodeTypes)
         {
             _environment = environment;
             _source = source;
             _destination = destination;
             _hosts = hosts;
+            _nodeTypes = nodeTypes;
             _applicationName = applicationName;
         }
 
@@ -57,7 +59,7 @@ namespace SuperGlue
                 .CreateInstanceAndUnwrap(typeof(RemoteBootstrapper).Assembly.FullName, typeof(RemoteBootstrapper).FullName);
 
             _bootstrapper.Initialize(_destination);
-            _bootstrapper.Start(_environment);
+            _bootstrapper.Start(_environment, _nodeTypes);
 
             var listener = new FileListener();
 

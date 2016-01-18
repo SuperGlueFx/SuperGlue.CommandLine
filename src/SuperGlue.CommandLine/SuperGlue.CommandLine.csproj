@@ -61,10 +61,6 @@
       <Paket>True</Paket>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Hosts\katana\SuperGlue.Configuration.dll">
-      <Paket>True</Paket>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Hosts\katana\SuperGlue.Hosting.Katana.dll">
       <Paket>True</Paket>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

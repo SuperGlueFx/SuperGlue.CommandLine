@@ -19,6 +19,7 @@ namespace SuperGlue
         public string ConfigFile { get; set; }
         public string Environment { get; set; }
         public ICollection<string> Hosts { get; set; }
+        public IEnumerable<string> NodeTypes { get; set; }
 
         public async Task Execute()
         {
@@ -66,7 +67,7 @@ namespace SuperGlue
             var applicationName = GetApplicationName(application);
 
             return new RunnableApplication(Environment, application, Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "",
-                    $"Applications\\{applicationName}"), applicationName, hosts.Select(x => new ApplicationHost(x)).ToList());
+                    $"Applications\\{applicationName}"), applicationName, hosts.Select(x => new ApplicationHost(x)).ToList(), NodeTypes);
         }
 
         private static string GetApplicationName(string path)

@@ -189,6 +189,11 @@ namespace SuperGlue
                 .Setup<string>('h', "hosts")
                 .Callback(x => command.Hosts = x.Split(',').Where(y => !string.IsNullOrWhiteSpace(y)).ToList());
 
+            parser
+                .Setup<string>('n', "nodes")
+                .Callback(x => command.NodeTypes = x.Split(',').Where(y => !string.IsNullOrWhiteSpace(y)).ToList())
+                .SetDefault("");
+
             parser.Parse(args);
 
             return command;
