@@ -58,6 +58,7 @@ namespace SuperGlue
                         await onError(application, ex);
 
                     Console.WriteLine($"Application {application.ApplicationName} failed: {ex.Message}");
+                    Console.WriteLine(ex.StackTrace);
                 }
             }
         }
