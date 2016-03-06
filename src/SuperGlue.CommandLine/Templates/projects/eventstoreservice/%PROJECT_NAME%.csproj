@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="paket.references" />
+    <None Include="%PROJECT_NAME%.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
