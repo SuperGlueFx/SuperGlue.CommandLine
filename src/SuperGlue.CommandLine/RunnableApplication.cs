@@ -13,7 +13,6 @@ namespace SuperGlue
         private readonly string _environment;
         private readonly string _source;
         private readonly string _destination;
-        private readonly string _applicationName;
         private readonly IEnumerable<ApplicationHost> _hosts;
         private readonly ICollection<FileListener> _fileListeners = new List<FileListener>();
         private AppDomain _appDomain;
@@ -25,8 +24,10 @@ namespace SuperGlue
             _source = source;
             _destination = destination;
             _hosts = hosts;
-            _applicationName = applicationName;
+            ApplicationName = applicationName;
         }
+
+        public string ApplicationName { get; private set; }
 
         public async Task Start()
         {
@@ -48,7 +49,7 @@ namespace SuperGlue
 
             _appDomain = AppDomain.CreateDomain(Guid.NewGuid().ToString(), null, new AppDomainSetup
             {
-                ConfigurationFile = $"{_applicationName}.dll.config",
+                ConfigurationFile = $"{ApplicationName}.dll.config",
                 PrivateBinPath = _destination,
                 ApplicationBase = _destination
             });

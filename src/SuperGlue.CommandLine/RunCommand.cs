@@ -57,7 +57,7 @@ namespace SuperGlue
                     if (onError != null)
                         await onError(application, ex);
 
-                    Console.WriteLine($"Application {application.GetType().Name} failed: {ex.Message}");
+                    Console.WriteLine($"Application {application.ApplicationName} failed: {ex.Message}");
                 }
             }
         }
