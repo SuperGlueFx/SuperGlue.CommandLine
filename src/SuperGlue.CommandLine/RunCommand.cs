@@ -24,7 +24,7 @@ namespace SuperGlue
         {
             var applications = GetApplications().ToList();
 
-            await Task.WhenAll(applications.Select(x => x.Start())).ConfigureAwait(false);
+            await ExecuteApplications(applications, x => x.Start(), (app, exception) => app.Stop());
 
             var key = Console.ReadKey();
 
@@ -35,12 +35,31 @@ namespace SuperGlue
 
                 Console.WriteLine();
 
-                await Task.WhenAll(applications.Select(x => x.Recycle())).ConfigureAwait(false);
+                await ExecuteApplications(applications, x => x.Recycle(), (app, exception) => app.Stop());
 
                 key = Console.ReadKey();
             }
 
-            await Task.WhenAll(applications.Select(x => x.Stop())).ConfigureAwait(false);
+            await ExecuteApplications(applications, x => x.Stop());
+        }
+
+        private static async Task ExecuteApplications(IEnumerable<RunnableApplication> applications,
+            Func<RunnableApplication, Task> execute, Func<RunnableApplication, Exception, Task> onError = null)
+        {
+            foreach (var application in applications)
+            {
+                try
+                {
+                    await execute(application);
+                }
+                catch (Exception ex)
+                {
+                    if (onError != null)
+                        await onError(application, ex);
+
+                    Console.WriteLine($"Application {application.GetType().Name} failed: {ex.Message}");
+                }
+            }
         }
 
         private IEnumerable<RunnableApplication> GetApplications()
@@ -52,10 +71,11 @@ namespace SuperGlue
                 yield break;
             }
 
-            if(!File.Exists(ConfigFile))
+            if (!File.Exists(ConfigFile))
                 yield break;
 
-            var configuration = JsonConvert.DeserializeObject<IEnumerable<ApplicationsConfig>>(File.ReadAllText(ConfigFile));
+            var configuration =
+                JsonConvert.DeserializeObject<IEnumerable<ApplicationsConfig>>(File.ReadAllText(ConfigFile));
 
             foreach (var application in configuration)
                 yield return CreateApplication(application.Path, application.Hosts ?? new List<string>());
@@ -65,15 +85,20 @@ namespace SuperGlue
         {
             var applicationName = GetApplicationName(application);
 
-            return new RunnableApplication(Environment, application, Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "",
-                    $"Applications\\{applicationName}"), applicationName, hosts.Select(x => new ApplicationHost(x)).ToList());
+            return new RunnableApplication(Environment, application,
+                Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "",
+                    $"Applications\\{applicationName}"), applicationName,
+                hosts.Select(x => new ApplicationHost(x)).ToList());
         }
 
         private static string GetApplicationName(string path)
         {
             var invalidPaths = new List<string>
             {
-                "bin", "obj", "debug", "release"
+                "bin",
+                "obj",
+                "debug",
+                "release"
             };
 
             var currentPath = path;
