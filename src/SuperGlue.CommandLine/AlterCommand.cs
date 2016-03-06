@@ -14,10 +14,19 @@ namespace SuperGlue
         public string Template { get; set; }
         public ICollection<string> TemplatePaths { get; set; }
         public string Location { get; set; }
+        public string LogTo { get; set; }
 
         public async Task Execute()
         {
-            var engine = TemplatingEngine.Init();
+            var loggers = new List<ILog>
+            {
+                new ConsoleLog()
+            };
+
+            if (!string.IsNullOrEmpty(LogTo))
+                loggers.Add(new FileLog(LogTo));
+
+            var engine = TemplatingEngine.Init(loggers.ToArray());
 
             var alterationDirectories = TemplatePaths
                 .Select(x => Path.Combine(x, "alterations\\base"))
@@ -35,7 +44,10 @@ namespace SuperGlue
             });
 
             foreach (var alterationDirectory in alterationDirectories)
-                await engine.RunTemplate(new AlterationTemplateType(Name, Location, Path.Combine(Location, $"src\\{Name}"), substitutions), alterationDirectory).ConfigureAwait(false);
+                await
+                    engine.RunTemplate(
+                        new AlterationTemplateType(Name, Location, Path.Combine(Location, $"src\\{Name}"), substitutions),
+                        alterationDirectory).ConfigureAwait(false);
         }
     }
 }

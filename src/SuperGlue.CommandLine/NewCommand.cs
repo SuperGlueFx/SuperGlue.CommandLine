@@ -19,10 +19,19 @@ namespace SuperGlue
         public ICollection<string> TemplatePaths { get; set; }
         public string Location { get; set; }
         public string ProjectGuid { get; set; }
+        public string LogTo { get; set; }
 
         public async Task Execute()
         {
-            var engine = TemplatingEngine.Init();
+            var loggers = new List<ILog>
+            {
+                new ConsoleLog()
+            };
+
+            if(!string.IsNullOrEmpty(LogTo))
+                loggers.Add(new FileLog(LogTo));
+
+            var engine = TemplatingEngine.Init(loggers.ToArray());
 
             var baseDirectory = TemplatePaths
                 .Select(x => Path.Combine(x, "solutions\\base"))
@@ -47,7 +56,8 @@ namespace SuperGlue
                 TemplatePaths = TemplatePaths,
                 Template = Template,
                 Solution = $"src\\{Name}.sln",
-                ProjectGuid = ProjectGuid
+                ProjectGuid = ProjectGuid,
+                LogTo = LogTo
             }.Execute().ConfigureAwait(false);
         }
     }

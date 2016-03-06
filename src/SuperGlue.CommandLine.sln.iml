@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RIDER_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../.gitignore">
+      <sourceFolder url="file://$MODULE_DIR$/../.gitignore" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../build.cake">
+      <sourceFolder url="file://$MODULE_DIR$/../build.cake" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../build.ps1">
+      <sourceFolder url="file://$MODULE_DIR$/../build.ps1" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../paket.dependencies">
+      <sourceFolder url="file://$MODULE_DIR$/../paket.dependencies" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../paket.lock">
+      <sourceFolder url="file://$MODULE_DIR$/../paket.lock" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/AppData/Local/JetBrains/Shared/v05/DecompilerCache/decompiler/13C1CA7B-53F9-4CBE-B3E4-3B9CEF2162D3/eb/6cf683b3/FileLog.cs">
+      <sourceFolder url="file://$USER_HOME$/AppData/Local/JetBrains/Shared/v05/DecompilerCache/decompiler/13C1CA7B-53F9-4CBE-B3E4-3B9CEF2162D3/eb/6cf683b3/FileLog.cs" isTestSource="false" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

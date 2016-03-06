@@ -9,7 +9,8 @@ namespace SuperGlue
 {
     public class Program
     {
-        private static readonly IDictionary<string, Func<FluentCommandLineParser, string[], ICommand>> CommandBuilders = new Dictionary<string, Func<FluentCommandLineParser, string[], ICommand>>
+        private static readonly IDictionary<string, Func<FluentCommandLineParser, string[], ICommand>> CommandBuilders = new Dictionary
+            <string, Func<FluentCommandLineParser, string[], ICommand>>
         {
             {"buildassets", BuildBuildAssetsCommand},
             {"run", BuildRunCommand},
@@ -26,7 +27,8 @@ namespace SuperGlue
 
             if (!CommandBuilders.ContainsKey(commandName))
             {
-                Console.WriteLine("{0} isn't a valid command. Available commands: {1}.", commandName, string.Join(", ", CommandBuilders.Select(x => x.Key)));
+                Console.WriteLine(
+                    $"{commandName} isn't a valid command. Available commands: {string.Join(", ", CommandBuilders.Select(x => x.Key))}.");
                 return;
             }
 
@@ -43,12 +45,14 @@ namespace SuperGlue
 
             parser
                 .Setup<string>('p', "path")
-                .Callback(x => command.AppPath = Path.IsPathRooted(x) ? x : Path.Combine(Environment.CurrentDirectory, x))
+                .Callback(
+                    x => command.AppPath = Path.IsPathRooted(x) ? x : Path.Combine(Environment.CurrentDirectory, x))
                 .SetDefault(Environment.CurrentDirectory);
 
             parser
                 .Setup<string>('d', "destination")
-                .Callback(x => command.Destination = Path.IsPathRooted(x) ? x : Path.Combine(Environment.CurrentDirectory, x))
+                .Callback(
+                    x => command.Destination = Path.IsPathRooted(x) ? x : Path.Combine(Environment.CurrentDirectory, x))
                 .SetDefault("/_assets");
 
             parser.Parse(args);
@@ -84,10 +88,15 @@ namespace SuperGlue
                 .Callback(x => command.ProjectGuid = x)
                 .SetDefault(Guid.NewGuid().ToString());
 
+            parser
+                .Setup<string>('o', "output")
+                .Callback(x => command.LogTo = x);
+
             parser.Parse(args);
 
             command.TemplatePaths.Add(Path.Combine(command.Location, "Templates"));
-            command.TemplatePaths.Add(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "", "Templates"));
+            command.TemplatePaths.Add(Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "", "Templates"));
 
             return command;
         }
@@ -124,10 +133,15 @@ namespace SuperGlue
                 .Callback(x => command.ProjectGuid = x)
                 .SetDefault(Guid.NewGuid().ToString());
 
+            parser
+                .Setup<string>('o', "output")
+                .Callback(x => command.LogTo = x);
+
             parser.Parse(args);
 
             command.TemplatePaths.Add(Path.Combine(command.Location, "Templates"));
-            command.TemplatePaths.Add(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "", "Templates"));
+            command.TemplatePaths.Add(Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "", "Templates"));
 
             return command;
         }
@@ -159,10 +173,15 @@ namespace SuperGlue
                 .Setup<string>('p', "templatepath")
                 .Callback(x => command.TemplatePaths.Add(x));
 
+            parser
+                .Setup<string>('o', "output")
+                .Callback(x => command.LogTo = x);
+
             parser.Parse(args);
 
             command.TemplatePaths.Add(Path.Combine(command.Location, "Templates"));
-            command.TemplatePaths.Add(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "", "Templates"));
+            command.TemplatePaths.Add(Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "", "Templates"));
 
             return command;
         }
