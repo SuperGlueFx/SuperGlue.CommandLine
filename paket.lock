@@ -21,7 +21,7 @@ NUGET
     Owin (1.0)
   remote: https://www.myget.org/F/jajo/api/v2
   specs:
-    JaJo.Projects.Templating (1.0.0.28)
+    JaJo.Projects.Templating (1.0.0.29)
     SuperGlue.Configuration (1.0.0.320)
       Newtonsoft.Json
     SuperGlue.Hosting.FastCgi (1.1.0.3)
