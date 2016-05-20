@@ -22,7 +22,7 @@ NUGET
   remote: https://www.myget.org/F/jajo/api/v2
   specs:
     JaJo.Projects.Templating (1.0.0.34)
-    SuperGlue.Configuration (1.0.0.322)
+    SuperGlue.Configuration (1.0.0.325)
       Newtonsoft.Json
     SuperGlue.Hosting.FastCgi (1.1.0.3)
       SuperGlue.Configuration
