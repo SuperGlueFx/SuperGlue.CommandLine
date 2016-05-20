@@ -16,7 +16,7 @@ namespace SuperGlue
 
         public string Name { get; set; }
         public string Template { get; set; }
-        public ICollection<string> TemplatePaths { get; set; }
+        public List<string> TemplatePaths { get; set; }
         public string Location { get; set; }
         public string ProjectGuid { get; set; }
         public string LogTo { get; set; }

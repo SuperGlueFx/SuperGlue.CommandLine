@@ -12,7 +12,6 @@ namespace SuperGlue
         private static readonly IDictionary<string, Func<FluentCommandLineParser, string[], ICommand>> CommandBuilders = new Dictionary
             <string, Func<FluentCommandLineParser, string[], ICommand>>
         {
-            {"buildassets", BuildBuildAssetsCommand},
             {"run", BuildRunCommand},
             {"new", BuildNewCommand},
             {"add", BuildAddCommand},
@@ -39,27 +38,6 @@ namespace SuperGlue
             command.Execute().Wait();
         }
 
-        private static BuildAssetsCommand BuildBuildAssetsCommand(FluentCommandLineParser parser, string[] args)
-        {
-            var command = new BuildAssetsCommand();
-
-            parser
-                .Setup<string>('p', "path")
-                .Callback(
-                    x => command.AppPath = Path.IsPathRooted(x) ? x : Path.Combine(Environment.CurrentDirectory, x))
-                .SetDefault(Environment.CurrentDirectory);
-
-            parser
-                .Setup<string>('d', "destination")
-                .Callback(
-                    x => command.Destination = Path.IsPathRooted(x) ? x : Path.Combine(Environment.CurrentDirectory, x))
-                .SetDefault("/_assets");
-
-            parser.Parse(args);
-
-            return command;
-        }
-
         private static NewCommand BuildNewCommand(FluentCommandLineParser parser, string[] args)
         {
             var command = new NewCommand();
@@ -80,8 +58,8 @@ namespace SuperGlue
                 .SetDefault(Environment.CurrentDirectory);
 
             parser
-                .Setup<string>('p', "templatepath")
-                .Callback(x => command.TemplatePaths.Add(x));
+                .Setup<string>('p', "templatepaths")
+                .Callback(x => command.TemplatePaths.AddRange((x ?? "").Split(';').Where(y => !string.IsNullOrEmpty(y))));
 
             parser
                 .Setup<string>('g', "guid")
@@ -125,8 +103,8 @@ namespace SuperGlue
                 .SetDefault(Environment.CurrentDirectory);
 
             parser
-                .Setup<string>('p', "templatepath")
-                .Callback(x => command.TemplatePaths.Add(x));
+                .Setup<string>('p', "templatepaths")
+                .Callback(x => command.TemplatePaths.AddRange((x ?? "").Split(';').Where(y => !string.IsNullOrEmpty(y))));
 
             parser
                 .Setup<string>('g', "guid")
@@ -170,8 +148,8 @@ namespace SuperGlue
                 .SetDefault(Environment.CurrentDirectory);
 
             parser
-                .Setup<string>('p', "templatepath")
-                .Callback(x => command.TemplatePaths.Add(x));
+                .Setup<string>('p', "templatepaths")
+                .Callback(x => command.TemplatePaths.AddRange((x ?? "").Split(';').Where(y => !string.IsNullOrEmpty(y))));
 
             parser
                 .Setup<string>('o', "output")

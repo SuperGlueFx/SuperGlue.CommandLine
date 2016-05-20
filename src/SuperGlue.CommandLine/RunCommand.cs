@@ -24,7 +24,7 @@ namespace SuperGlue
         {
             var applications = GetApplications().ToList();
 
-            await ExecuteApplications(applications, x => x.Start(), (app, exception) => app.Stop());
+            await ExecuteApplications(applications, x => x.Start(), (app, exception) => app.Stop()).ConfigureAwait(false);
 
             var key = Console.ReadKey();
 
@@ -35,12 +35,12 @@ namespace SuperGlue
 
                 Console.WriteLine();
 
-                await ExecuteApplications(applications, x => x.Recycle(), (app, exception) => app.Stop());
+                await ExecuteApplications(applications, x => x.Recycle(), (app, exception) => app.Stop()).ConfigureAwait(false);
 
                 key = Console.ReadKey();
             }
 
-            await ExecuteApplications(applications, x => x.Stop());
+            await ExecuteApplications(applications, x => x.Stop()).ConfigureAwait(false);
         }
 
         private static async Task ExecuteApplications(IEnumerable<RunnableApplication> applications,
@@ -50,12 +50,12 @@ namespace SuperGlue
             {
                 try
                 {
-                    await execute(application);
+                    await execute(application).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
                     if (onError != null)
-                        await onError(application, ex);
+                        await onError(application, ex).ConfigureAwait(false);
 
                     Console.WriteLine($"Application {application.ApplicationName} failed: {ex.Message}");
                     Console.WriteLine(ex.StackTrace);

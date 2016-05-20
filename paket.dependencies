@@ -5,4 +5,3 @@ nuget JaJo.Projects.Templating
 nuget SuperGlue.Configuration
 nuget SuperGlue.Hosting.FastCgi
 nuget SuperGlue.Hosting.Katana
-nuget SuperGlue.Web.Assets
