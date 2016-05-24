@@ -27,7 +27,7 @@ namespace SuperGlue
             ApplicationName = applicationName;
         }
 
-        public string ApplicationName { get; private set; }
+        public string ApplicationName { get; }
 
         public async Task Start()
         {
@@ -62,7 +62,30 @@ namespace SuperGlue
 
             var listener = new FileListener();
 
-            listener.StartListening(_source, "*", x => Recycle().Wait());
+            var extensionsNeddingReload = new List<string>
+            {
+                ".dll",
+                ".exe",
+                ".config",
+                ".xml"
+            };
+
+            listener.StartListening(_source, "*", x =>
+            {
+                var extension = Path.GetExtension(x);
+                if (extensionsNeddingReload.Contains(extension))
+                {
+                    Recycle().Wait();
+
+                    return;
+                }
+
+                var relativePath = x.Replace(_source, "");
+
+                var newPath = Path.Combine(_destination, relativePath);
+
+                File.Copy(x, newPath, true);
+            });
 
             _fileListeners.Add(listener);
         }
@@ -119,7 +142,7 @@ namespace SuperGlue
             foreach (var file in files)
             {
                 var temppath = Path.Combine(destDirName, file.Name);
-                file.CopyTo(temppath, false);
+                file.CopyTo(temppath, true);
             }
 
             foreach (var subdir in dirs)
