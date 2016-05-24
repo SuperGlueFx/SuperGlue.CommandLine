@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.XmlTransform;
 using SuperGlue.Configuration;
@@ -87,7 +88,19 @@ namespace SuperGlue
 
                 var newPath = Path.Combine(_destination, relativePath);
 
-                File.Copy(x, newPath, true);
+                for (var i = 0; i < 10; i++)
+                {
+                    try
+                    {
+                        File.Copy(x, newPath, true);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Failed copying file: {ex.Message}");
+                        Thread.Sleep(TimeSpan.FromSeconds(1));
+                    }
+                }
             });
 
             _fileListeners.Add(listener);
