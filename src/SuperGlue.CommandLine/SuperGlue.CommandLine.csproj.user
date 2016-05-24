@@ -3,4 +3,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartArguments>run -a "C:\Projects\JaJo\JaJo.Commerce\JaJo.Commerce.Themes.Erlan\src\JaJo.Commerce.Themes.Erlan" -h katana</StartArguments>
   </PropertyGroup>
+  <PropertyGroup>
+    <ProjectView>ProjectFiles</ProjectView>
+  </PropertyGroup>
 </Project>

@@ -35,48 +35,63 @@
   <ItemGroup>
     <Content Include="Hosts\fastcgi\FastCgiNet.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\fastcgi\Fos.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\fastcgi\Microsoft.Owin.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\fastcgi\mscorlib.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\fastcgi\Newtonsoft.Json.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\fastcgi\Owin.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\fastcgi\SuperGlue.Hosting.FastCgi.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\katana\Microsoft.Owin.Diagnostics.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\katana\Microsoft.Owin.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\katana\Microsoft.Owin.Host.HttpListener.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\katana\Microsoft.Owin.Hosting.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\katana\mscorlib.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\katana\Newtonsoft.Json.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\katana\Owin.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Hosts\katana\SuperGlue.Hosting.Katana.dll">
       <Paket>True</Paket>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="paket.template" />
     <None Include="Templates\**\*.*">
