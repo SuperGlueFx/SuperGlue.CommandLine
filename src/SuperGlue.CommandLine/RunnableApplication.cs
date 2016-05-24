@@ -82,7 +82,7 @@ namespace SuperGlue
 
                 var relativePath = x.Replace(_source, "");
 
-                var newPath = Path.Combine(_destination, relativePath);
+                var newPath = $"{_destination}{relativePath}";
 
                 File.Copy(x, newPath, true);
             });
