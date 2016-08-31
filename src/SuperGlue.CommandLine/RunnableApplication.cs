@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.XmlTransform;
 using SuperGlue.Configuration;
@@ -15,16 +14,18 @@ namespace SuperGlue
         private readonly string _source;
         private readonly string _destination;
         private readonly IEnumerable<ApplicationHost> _hosts;
+        private readonly IEnumerable<string> _ignoredPaths;
         private readonly ICollection<FileListener> _fileListeners = new List<FileListener>();
         private AppDomain _appDomain;
         private RemoteBootstrapper _bootstrapper;
 
-        public RunnableApplication(string environment, string source, string destination, string applicationName, IEnumerable<ApplicationHost> hosts)
+        public RunnableApplication(string environment, string source, string destination, string applicationName, IEnumerable<ApplicationHost> hosts, params string[] ignoredPaths)
         {
             _environment = environment;
             _source = source;
             _destination = destination;
             _hosts = hosts;
+            _ignoredPaths = ignoredPaths;
             ApplicationName = applicationName;
         }
 
@@ -92,7 +93,9 @@ namespace SuperGlue
                 {
                     try
                     {
-                        File.Copy(x, newPath, true);
+                        if (ShouldCopy(Path.GetDirectoryName(x)))
+                            File.Copy(x, newPath, true);
+
                         break;
                     }
                     catch (Exception ex)
@@ -143,8 +146,11 @@ namespace SuperGlue
             _fileListeners.Clear();
         }
 
-        private static void DirectoryCopy(string sourceDirName, string destDirName)
+        private void DirectoryCopy(string sourceDirName, string destDirName)
         {
+            if (!ShouldCopy(sourceDirName))
+                return;
+
             var dir = new DirectoryInfo(sourceDirName);
             var dirs = dir.GetDirectories();
 
@@ -166,6 +172,11 @@ namespace SuperGlue
                 var temppath = Path.Combine(destDirName, subdir.Name);
                 DirectoryCopy(subdir.FullName, temppath);
             }
+        }
+
+        private bool ShouldCopy(string directory)
+        {
+            return !_ignoredPaths.Any(directory.EndsWith);
         }
 
         private static void TransformConfigurationsIn(string directory, string configExtension, string transformation)

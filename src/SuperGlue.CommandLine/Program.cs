@@ -186,6 +186,10 @@ namespace SuperGlue
                 .Setup<string>('h', "hosts")
                 .Callback(x => command.Hosts = x.Split(',').Where(y => !string.IsNullOrWhiteSpace(y)).ToList());
 
+            parser
+                .Setup<string>('i', "ignore")
+                .Callback(x => command.IgnoredPaths = x.Split(',').Where(y => !string.IsNullOrWhiteSpace(y)).ToList());
+
             parser.Parse(args);
 
             return command;
