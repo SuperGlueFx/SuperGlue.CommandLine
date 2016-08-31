@@ -52,7 +52,23 @@ namespace SuperGlue
         private RunConfiguration GetConfiguration()
         {
             if (!string.IsNullOrEmpty(Config) && File.Exists(Config))
-                return JsonConvert.DeserializeObject<RunConfiguration>(File.ReadAllText(Config));
+            {
+                var config = JsonConvert.DeserializeObject<RunConfiguration>(File.ReadAllText(Config));
+
+                if (string.IsNullOrEmpty(config.Application))
+                    Application = Application;
+
+                if (string.IsNullOrEmpty(config.Environment))
+                    config.Environment = Environment;
+
+                if (!config.Hosts.Any())
+                    config.Hosts = Hosts;
+
+                if (!config.IgnoredPaths.Any())
+                    config.IgnoredPaths = IgnoredPaths;
+
+                return config;
+            }
 
             return new RunConfiguration(Application, Environment, Hosts, IgnoredPaths);
         }
