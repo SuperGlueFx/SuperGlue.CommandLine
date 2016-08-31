@@ -116,17 +116,19 @@ namespace SuperGlue
 
         private IEnumerable<RunnableApplication> GetApplications(RunConfiguration runConfiguration)
         {
-            yield return CreateApplication(runConfiguration);
+            var hostArguments = runConfiguration.Hosts.ToDictionary(x => x.Name, x => (x.Arguments ?? new List<string>()).ToArray());
+
+            yield return CreateApplication(runConfiguration, hostArguments);
         }
 
-        private RunnableApplication CreateApplication(RunConfiguration runConfiguration)
+        private RunnableApplication CreateApplication(RunConfiguration runConfiguration, IDictionary<string, string[]> hostArguments)
         {
             var applicationName = GetApplicationName(runConfiguration.Application);
 
             return new RunnableApplication(runConfiguration.Environment, runConfiguration.Application,
                 Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "",
                     $"Applications\\{applicationName}"), applicationName,
-                runConfiguration.Hosts.Select(x => new ApplicationHost(x.Name)).ToList(), (runConfiguration.IgnoredPaths ?? new List<string>()).ToArray());
+                runConfiguration.Hosts.Select(x => new ApplicationHost(x.Name)).ToList(), hostArguments, (runConfiguration.IgnoredPaths ?? new List<string>()).ToArray());
         }
 
         private static string GetApplicationName(string path)

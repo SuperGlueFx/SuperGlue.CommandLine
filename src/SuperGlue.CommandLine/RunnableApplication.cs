@@ -16,16 +16,18 @@ namespace SuperGlue
         private readonly string _destination;
         private readonly IEnumerable<ApplicationHost> _hosts;
         private readonly IEnumerable<string> _ignoredPaths;
+        private readonly IDictionary<string, string[]> _hostArguments;
         private readonly ICollection<FileListener> _fileListeners = new List<FileListener>();
         private AppDomain _appDomain;
         private RemoteBootstrapper _bootstrapper;
 
-        public RunnableApplication(string environment, string source, string destination, string applicationName, IEnumerable<ApplicationHost> hosts, params string[] ignoredPaths)
+        public RunnableApplication(string environment, string source, string destination, string applicationName, IEnumerable<ApplicationHost> hosts, IDictionary<string, string[]> hostArguments, params string[] ignoredPaths)
         {
             _environment = environment;
             _source = source;
             _destination = destination;
             _hosts = hosts;
+            _hostArguments = hostArguments;
             _ignoredPaths = ignoredPaths;
             ApplicationName = applicationName;
         }
@@ -61,7 +63,7 @@ namespace SuperGlue
                 .CreateInstanceAndUnwrap(typeof(RemoteBootstrapper).Assembly.FullName, typeof(RemoteBootstrapper).FullName);
 
             _bootstrapper.Initialize(_destination);
-            _bootstrapper.Start(_environment);
+            _bootstrapper.Start(_environment, _hostArguments);
 
             var listener = new FileListener();
 

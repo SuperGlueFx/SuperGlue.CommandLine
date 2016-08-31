@@ -258,12 +258,12 @@ NUGET
   remote: https://www.myget.org/F/jajo/api/v2
   specs:
     JaJo.Projects.Templating (1.0.0.34)
-    SuperGlue.Configuration (1.0.0.359)
+    SuperGlue.Configuration (1.0.0.360)
       Newtonsoft.Json
-    SuperGlue.Hosting.Aurelia (1.1.0.7)
+    SuperGlue.Hosting.Aurelia (1.1.0.9)
       SuperGlue.Configuration
-    SuperGlue.Hosting.FastCgi (1.1.0.7)
+    SuperGlue.Hosting.FastCgi (1.1.0.9)
       SuperGlue.Configuration
-    SuperGlue.Hosting.Katana (1.1.0.7)
+    SuperGlue.Hosting.Katana (1.1.0.9)
       Microsoft.Owin.SelfHost (>= 3.0.1)
       SuperGlue.Configuration
