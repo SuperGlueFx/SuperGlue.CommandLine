@@ -56,21 +56,37 @@ namespace SuperGlue
                 var config = JsonConvert.DeserializeObject<RunConfiguration>(File.ReadAllText(Config));
 
                 if (string.IsNullOrEmpty(config.Application))
-                    Application = Application;
+                    config.Application = Application;
 
                 if (string.IsNullOrEmpty(config.Environment))
                     config.Environment = Environment;
 
                 if (config.Hosts == null || !config.Hosts.Any())
-                    config.Hosts = Hosts;
+                {
+                    config.Hosts = Hosts.Select(x => new RunConfiguration.HostConfiguration
+                    {
+                        Name = x,
+                        Arguments = new List<string>()
+                    }).ToList();
+                }
 
                 if (config.IgnoredPaths == null || !config.IgnoredPaths.Any())
-                    config.IgnoredPaths = IgnoredPaths;
+                    config.IgnoredPaths = IgnoredPaths.ToList();
 
                 return config;
             }
 
-            return new RunConfiguration(Application, Environment, Hosts, IgnoredPaths);
+            return new RunConfiguration
+            {
+                IgnoredPaths = IgnoredPaths.ToList(),
+                Application = Application,
+                Hosts = Hosts.Select(x => new RunConfiguration.HostConfiguration
+                {
+                    Name = x,
+                    Arguments = new List<string>()
+                }).ToList(),
+                Environment = Environment
+            };
         }
 
         private static async Task StopApplications(IEnumerable<RunnableApplication> applications)
@@ -110,7 +126,7 @@ namespace SuperGlue
             return new RunnableApplication(runConfiguration.Environment, runConfiguration.Application,
                 Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "",
                     $"Applications\\{applicationName}"), applicationName,
-                runConfiguration.Hosts.Select(x => new ApplicationHost(x)).ToList(), (runConfiguration.IgnoredPaths ?? new List<string>()).ToArray());
+                runConfiguration.Hosts.Select(x => new ApplicationHost(x.Name)).ToList(), (runConfiguration.IgnoredPaths ?? new List<string>()).ToArray());
         }
 
         private static string GetApplicationName(string path)
@@ -142,44 +158,14 @@ namespace SuperGlue
 
         public class RunConfiguration
         {
-            public RunConfiguration()
-            {
-
-            }
-
-            public RunConfiguration(string application, string environment, IEnumerable<string> hosts, IEnumerable<string> ignoredPaths)
-            {
-                Application = application;
-                Environment = environment;
-                Hosts = hosts;
-                IgnoredPaths = ignoredPaths;
-            }
-
-            [JsonProperty("application")]
             public string Application { get; set; }
-            [JsonProperty("environment")]
             public string Environment { get; set; }
-            [JsonProperty("hosts")]
-            public IEnumerable<string> Hosts { get; set; }
-            [JsonProperty("ignoredPaths")]
-            public IEnumerable<string> IgnoredPaths { get; set; }
+            public List<HostConfiguration> Hosts { get; set; }
+            public List<string> IgnoredPaths { get; set; }
 
             public class HostConfiguration
             {
-                public HostConfiguration()
-                {
-
-                }
-
-                public HostConfiguration(string name, IEnumerable<string> arguments)
-                {
-                    Name = name;
-                    Arguments = arguments;
-                }
-
-                [JsonProperty("name")]
                 public string Name { get; set; }
-                [JsonProperty("arguments")]
                 public IEnumerable<string> Arguments { get; set; }
             }
         }
