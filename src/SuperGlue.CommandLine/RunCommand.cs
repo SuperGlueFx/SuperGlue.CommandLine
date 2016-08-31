@@ -61,10 +61,10 @@ namespace SuperGlue
                 if (string.IsNullOrEmpty(config.Environment))
                     config.Environment = Environment;
 
-                if (!config.Hosts.Any())
+                if (config.Hosts == null || !config.Hosts.Any())
                     config.Hosts = Hosts;
 
-                if (!config.IgnoredPaths.Any())
+                if (config.IgnoredPaths == null || !config.IgnoredPaths.Any())
                     config.IgnoredPaths = IgnoredPaths;
 
                 return config;
