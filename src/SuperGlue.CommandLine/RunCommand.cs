@@ -24,6 +24,8 @@ namespace SuperGlue
         {
             var applications = GetApplications().ToList();
 
+            Console.CancelKeyPress += async (x, y) => await StopApplications(applications).ConfigureAwait(false);
+
             await ExecuteApplications(applications, x => x.Start(), (app, exception) => app.Stop()).ConfigureAwait(false);
 
             var key = Console.ReadKey();
@@ -40,6 +42,11 @@ namespace SuperGlue
                 key = Console.ReadKey();
             }
 
+            await StopApplications(applications).ConfigureAwait(false);
+        }
+
+        private static async Task StopApplications(IEnumerable<RunnableApplication> applications)
+        {
             await ExecuteApplications(applications, x => x.Stop()).ConfigureAwait(false);
         }
 

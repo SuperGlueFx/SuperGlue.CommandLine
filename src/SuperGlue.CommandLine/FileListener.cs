@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace SuperGlue
 {
@@ -7,7 +8,7 @@ namespace SuperGlue
     {
         private FileSystemWatcher _fileSystemWatcher;
 
-        public void StartListening(string directory, string filter, Action<string> updated)
+        public void StartListening(string directory, string filter, Func<string, Task> updated)
         {
             _fileSystemWatcher?.Dispose();
 
@@ -17,24 +18,24 @@ namespace SuperGlue
                 IncludeSubdirectories = true
             };
 
-            _fileSystemWatcher.Created += (sender, eventArgs) =>
+            _fileSystemWatcher.Created += async (sender, eventArgs) =>
             {
-                updated(eventArgs.FullPath);
+                await updated(eventArgs.FullPath).ConfigureAwait(false);
             };
 
-            _fileSystemWatcher.Changed += (sender, eventArgs) =>
+            _fileSystemWatcher.Changed += async (sender, eventArgs) =>
             {
-                updated(eventArgs.FullPath);
+                await updated(eventArgs.FullPath).ConfigureAwait(false);
             };
 
-            _fileSystemWatcher.Deleted += (sender, eventArgs) =>
+            _fileSystemWatcher.Deleted += async (sender, eventArgs) =>
             {
-                updated(eventArgs.FullPath);
+                await updated(eventArgs.FullPath).ConfigureAwait(false);
             };
 
-            _fileSystemWatcher.Renamed += (sender, eventArgs) =>
+            _fileSystemWatcher.Renamed += async (sender, eventArgs) =>
             {
-                updated(eventArgs.FullPath);
+                await updated(eventArgs.FullPath).ConfigureAwait(false);
             };
         }
 

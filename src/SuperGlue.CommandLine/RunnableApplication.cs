@@ -63,7 +63,7 @@ namespace SuperGlue
 
             var listener = new FileListener();
 
-            var extensionsNeddingReload = new List<string>
+            var extensionsNeedingReload = new List<string>
             {
                 ".dll",
                 ".exe",
@@ -71,12 +71,12 @@ namespace SuperGlue
                 ".xml"
             };
 
-            listener.StartListening(_source, "*", x =>
+            listener.StartListening(_source, "*", async x =>
             {
                 var extension = Path.GetExtension(x);
-                if (extensionsNeddingReload.Contains(extension))
+                if (extensionsNeedingReload.Contains(extension))
                 {
-                    Recycle().Wait();
+                    await Recycle().ConfigureAwait(false);
 
                     return;
                 }
@@ -98,7 +98,7 @@ namespace SuperGlue
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Failed copying file: {ex.Message}");
-                        Thread.Sleep(TimeSpan.FromSeconds(1));
+                        await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
                     }
                 }
             });
