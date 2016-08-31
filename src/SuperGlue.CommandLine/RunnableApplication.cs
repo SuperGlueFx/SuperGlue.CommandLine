@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Web.XmlTransform;
 using SuperGlue.Configuration;
@@ -176,7 +177,7 @@ namespace SuperGlue
 
         private bool ShouldCopy(string directory)
         {
-            return !_ignoredPaths.Any(directory.EndsWith);
+            return !_ignoredPaths.Any(x => Regex.IsMatch(directory, x));
         }
 
         private static void TransformConfigurationsIn(string directory, string configExtension, string transformation)
