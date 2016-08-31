@@ -13,17 +13,20 @@ namespace SuperGlue
         public RunCommand()
         {
             Hosts = new List<string>();
+            IgnoredPaths = new List<string>();
         }
 
         public string Application { get; set; }
-        public string ConfigFile { get; set; }
+        public string Config { get; set; }
         public string Environment { get; set; }
         public ICollection<string> Hosts { get; set; }
         public ICollection<string> IgnoredPaths { get; set; }
 
         public async Task Execute()
         {
-            var applications = GetApplications().ToList();
+            var configuration = GetConfiguration();
+
+            var applications = GetApplications(configuration).ToList();
 
             Console.CancelKeyPress += async (x, y) => await StopApplications(applications).ConfigureAwait(false);
 
@@ -44,6 +47,14 @@ namespace SuperGlue
             }
 
             await StopApplications(applications).ConfigureAwait(false);
+        }
+
+        private RunConfiguration GetConfiguration()
+        {
+            if (!string.IsNullOrEmpty(Config) && File.Exists(Config))
+                return JsonConvert.DeserializeObject<RunConfiguration>(File.ReadAllText(Config));
+
+            return new RunConfiguration(Application, Environment, Hosts, IgnoredPaths);
         }
 
         private static async Task StopApplications(IEnumerable<RunnableApplication> applications)
@@ -71,33 +82,19 @@ namespace SuperGlue
             }
         }
 
-        private IEnumerable<RunnableApplication> GetApplications()
+        private IEnumerable<RunnableApplication> GetApplications(RunConfiguration runConfiguration)
         {
-            if (string.IsNullOrEmpty(ConfigFile))
-            {
-                yield return CreateApplication(Application, Hosts);
-
-                yield break;
-            }
-
-            if (!File.Exists(ConfigFile))
-                yield break;
-
-            var configuration =
-                JsonConvert.DeserializeObject<IEnumerable<ApplicationsConfig>>(File.ReadAllText(ConfigFile));
-
-            foreach (var application in configuration)
-                yield return CreateApplication(application.Path, application.Hosts ?? new List<string>());
+            yield return CreateApplication(runConfiguration);
         }
 
-        private RunnableApplication CreateApplication(string application, IEnumerable<string> hosts)
+        private RunnableApplication CreateApplication(RunConfiguration runConfiguration)
         {
-            var applicationName = GetApplicationName(application);
+            var applicationName = GetApplicationName(runConfiguration.Application);
 
-            return new RunnableApplication(Environment, application,
+            return new RunnableApplication(runConfiguration.Environment, runConfiguration.Application,
                 Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "",
                     $"Applications\\{applicationName}"), applicationName,
-                hosts.Select(x => new ApplicationHost(x)).ToList(), (IgnoredPaths ?? new List<string>()).ToArray());
+                runConfiguration.Hosts.Select(x => new ApplicationHost(x)).ToList(), (runConfiguration.IgnoredPaths ?? new List<string>()).ToArray());
         }
 
         private static string GetApplicationName(string path)
@@ -127,10 +124,48 @@ namespace SuperGlue
             }
         }
 
-        public class ApplicationsConfig
+        public class RunConfiguration
         {
-            public string Path { get; set; }
+            public RunConfiguration()
+            {
+
+            }
+
+            public RunConfiguration(string application, string environment, IEnumerable<string> hosts, IEnumerable<string> ignoredPaths)
+            {
+                Application = application;
+                Environment = environment;
+                Hosts = hosts;
+                IgnoredPaths = ignoredPaths;
+            }
+
+            [JsonProperty("application")]
+            public string Application { get; set; }
+            [JsonProperty("environment")]
+            public string Environment { get; set; }
+            [JsonProperty("hosts")]
             public IEnumerable<string> Hosts { get; set; }
+            [JsonProperty("ignoredPaths")]
+            public IEnumerable<string> IgnoredPaths { get; set; }
+
+            public class HostConfiguration
+            {
+                public HostConfiguration()
+                {
+
+                }
+
+                public HostConfiguration(string name, IEnumerable<string> arguments)
+                {
+                    Name = name;
+                    Arguments = arguments;
+                }
+
+                [JsonProperty("name")]
+                public string Name { get; set; }
+                [JsonProperty("arguments")]
+                public IEnumerable<string> Arguments { get; set; }
+            }
         }
     }
 }

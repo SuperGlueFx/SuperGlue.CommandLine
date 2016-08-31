@@ -175,7 +175,7 @@ namespace SuperGlue
 
             parser
                 .Setup<string>('c', "config")
-                .Callback(x => command.ConfigFile = x);
+                .Callback(x => command.Config = x);
 
             parser
                 .Setup<string>('e', "environment")
