@@ -16,7 +16,8 @@ namespace SuperGlue
             {"new", BuildNewCommand},
             {"add", BuildAddCommand},
             {"alter", BuildAlterCommand},
-            {"install", BuildInstallCommand}
+            {"install", BuildInstallCommand},
+            {"uninstall", BuildUnInstallCommand}
         };
 
         public static void Main(string[] args)
@@ -214,6 +215,29 @@ namespace SuperGlue
                 .Setup<string>('e', "environment")
                 .Callback(x => command.Environment = x)
                 .SetDefault("local");
+
+            parser
+                .Setup<string>('h', "hosts")
+                .Callback(x => command.Hosts = x.Split(',').Where(y => !string.IsNullOrWhiteSpace(y)).ToList());
+
+            parser.Parse(args);
+
+            return command;
+        }
+
+        private static UnInstallCommand BuildUnInstallCommand(FluentCommandLineParser parser, string[] args)
+        {
+            var command = new UnInstallCommand();
+
+            parser
+                .Setup<string>('i', "installer")
+                .Callback(x => command.Installer = x)
+                .Required();
+
+            parser
+                .Setup<string>('a', "application")
+                .Callback(x => command.Application = x)
+                .SetDefault(Environment.CurrentDirectory);
 
             parser
                 .Setup<string>('h', "hosts")

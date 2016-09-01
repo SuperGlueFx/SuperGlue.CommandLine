@@ -8,16 +8,15 @@ using System.Threading.Tasks;
 
 namespace SuperGlue
 {
-    public class InstallCommand : ICommand
+    public class UnInstallCommand : ICommand
     {
-        public InstallCommand()
+        public UnInstallCommand()
         {
             Hosts = new List<string>();
         }
 
         public string Installer { get; set; }
         public string Application { get; set; }
-        public string Environment { get; set; }
         public ICollection<string> Hosts { get; set; }
 
         public Task Execute()
@@ -36,9 +35,7 @@ namespace SuperGlue
             if (string.IsNullOrEmpty(installerFile))
                 return Task.CompletedTask;
 
-            var applicationName = GetApplicationName(Application);
-
-            var startInfo = new ProcessStartInfo(Path.Combine(Application, installerFile), $"install -appname:{applicationName} -environment:{Environment}")
+            var startInfo = new ProcessStartInfo(Path.Combine(Application, installerFile), "uninstall")
             {
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden,
@@ -61,34 +58,6 @@ namespace SuperGlue
                 process.WaitForExit();
 
             return Task.CompletedTask;
-        }
-
-        private static string GetApplicationName(string path)
-        {
-            var invalidPaths = new List<string>
-            {
-                "bin",
-                "obj",
-                "debug",
-                "release",
-                "src"
-            };
-
-            var currentPath = path;
-            var name = Path.GetFileName(currentPath);
-
-            while (true)
-            {
-                if (!invalidPaths.Any(x => x.Equals(name, StringComparison.InvariantCultureIgnoreCase)))
-                    return name;
-
-                currentPath = Path.GetDirectoryName(currentPath);
-
-                name = Path.GetFileName(currentPath);
-
-                if (string.IsNullOrEmpty(currentPath) || string.IsNullOrEmpty(name))
-                    return "Default";
-            }
         }
 
         private static void DirectoryCopy(string sourceDirName, string destDirName)
@@ -115,5 +84,6 @@ namespace SuperGlue
                 DirectoryCopy(subdir.FullName, temppath);
             }
         }
+
     }
 }
