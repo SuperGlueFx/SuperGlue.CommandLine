@@ -9,4 +9,5 @@ files
 	bin/Release/*.dll ==> tools
 	bin/Release/Templates/**/*.* ==> tools/Templates
 	bin/Release/Hosts/**/*.* ==> tools/Hosts
+	bin/Release/Installers/**/*.* ==> tools/Installers
 	bin/Release/*.config ==> tools

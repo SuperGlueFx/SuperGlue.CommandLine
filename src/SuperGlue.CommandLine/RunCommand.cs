@@ -114,7 +114,7 @@ namespace SuperGlue
             }
         }
 
-        private IEnumerable<RunnableApplication> GetApplications(RunConfiguration runConfiguration)
+        private static IEnumerable<RunnableApplication> GetApplications(RunConfiguration runConfiguration)
         {
             var hostArguments = runConfiguration.Hosts.ToDictionary(x => x.Name, x => (x.Arguments ?? new List<string>()).ToArray());
 
