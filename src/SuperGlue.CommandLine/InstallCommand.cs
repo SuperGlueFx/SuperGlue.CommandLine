@@ -33,16 +33,28 @@ namespace SuperGlue
             DirectoryCopy(installerDirectory, Application);
 
             foreach (var host in Hosts)
+            {
                 DirectoryCopy(Path.Combine(location, $"Hosts\\{host}"), Application);
+
+                Console.WriteLine($"Installed host \"{host}\"");
+            }
 
             if (string.IsNullOrEmpty(installerFile))
                 return Task.CompletedTask;
 
             var applicationName = GetApplicationName(Application);
 
-            File.Copy(Path.Combine(Application, $"{applicationName}.dll.config"), Path.Combine(Application, $"{installerFile}.config"));
+            Console.WriteLine($"Found application name: {applicationName}");
 
-            var startInfo = new ProcessStartInfo(Path.Combine(Application, installerFile), $"install -appname:\"{applicationName}\" -environment:{Environment}")
+            File.Copy(Path.Combine(Application, $"{applicationName}.dll.config"), Path.Combine(Application, $"{installerFile}.config"), true);
+
+            var arguments = $"install -appname:\"{applicationName}\" -environment:{Environment}";
+
+            var installer = Path.Combine(Application, installerFile);
+
+            Console.WriteLine($"Going to run installer: \"{installer}\" with arguments: {arguments}");
+
+            var startInfo = new ProcessStartInfo(installer, arguments)
             {
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden,
@@ -61,8 +73,17 @@ namespace SuperGlue
 
             process.OutputDataReceived += (x, y) => Console.WriteLine(y.Data);
 
+            process.ErrorDataReceived += (x, y) => Console.WriteLine(y.Data);
+
             if (process.Start())
+            {
+                Console.WriteLine("Installation started");
                 process.WaitForExit();
+            }
+            else
+            {
+                Console.WriteLine("Installation failed");
+            }
 
             return Task.CompletedTask;
         }
