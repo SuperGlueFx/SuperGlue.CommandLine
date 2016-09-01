@@ -267,3 +267,4 @@ NUGET
     SuperGlue.Hosting.Katana (1.1.0.9)
       Microsoft.Owin.SelfHost (>= 3.0.1)
       SuperGlue.Configuration
+    SuperGlue.Installers.TopShelf (1.1.0.10)

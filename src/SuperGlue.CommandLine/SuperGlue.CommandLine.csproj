@@ -40,6 +40,9 @@
     <None Include="Hosts\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Installers\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Web.XmlTransform">
@@ -61,6 +64,7 @@
     <Compile Include="AddCommand.cs" />
     <Compile Include="AlterCommand.cs" />
     <Compile Include="ApplicationHost.cs" />
+    <Compile Include="InstallCommand.cs" />
     <Compile Include="NewCommand.cs" />
     <Compile Include="DirectoryExtensions.cs" />
     <Compile Include="FileListener.cs" />

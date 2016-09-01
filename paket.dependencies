@@ -6,3 +6,4 @@ nuget SuperGlue.Configuration
 nuget SuperGlue.Hosting.Aurelia
 nuget SuperGlue.Hosting.FastCgi
 nuget SuperGlue.Hosting.Katana
+nuget SuperGlue.Installers.TopShelf

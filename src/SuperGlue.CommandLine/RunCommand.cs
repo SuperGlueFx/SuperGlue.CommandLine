@@ -121,7 +121,7 @@ namespace SuperGlue
             yield return CreateApplication(runConfiguration, hostArguments);
         }
 
-        private RunnableApplication CreateApplication(RunConfiguration runConfiguration, IDictionary<string, string[]> hostArguments)
+        private static RunnableApplication CreateApplication(RunConfiguration runConfiguration, IDictionary<string, string[]> hostArguments)
         {
             var applicationName = GetApplicationName(runConfiguration.Application);
 
