@@ -35,7 +35,9 @@ namespace SuperGlue
             if (string.IsNullOrEmpty(installerFile))
                 return Task.CompletedTask;
 
-            var startInfo = new ProcessStartInfo(Path.Combine(Application, installerFile), "uninstall")
+            var applicationName = GetApplicationName(Application);
+
+            var startInfo = new ProcessStartInfo(Path.Combine(Application, installerFile), $"uninstall -appname:\"{applicationName}\"")
             {
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden,
@@ -85,5 +87,32 @@ namespace SuperGlue
             }
         }
 
+        private static string GetApplicationName(string path)
+        {
+            var invalidPaths = new List<string>
+            {
+                "bin",
+                "obj",
+                "debug",
+                "release",
+                "src"
+            };
+
+            var currentPath = path;
+            var name = Path.GetFileName(currentPath);
+
+            while (true)
+            {
+                if (!invalidPaths.Any(x => x.Equals(name, StringComparison.InvariantCultureIgnoreCase)))
+                    return name;
+
+                currentPath = Path.GetDirectoryName(currentPath);
+
+                name = Path.GetFileName(currentPath);
+
+                if (string.IsNullOrEmpty(currentPath) || string.IsNullOrEmpty(name))
+                    return "Default";
+            }
+        }
     }
 }

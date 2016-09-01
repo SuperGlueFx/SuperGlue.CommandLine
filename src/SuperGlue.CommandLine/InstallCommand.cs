@@ -40,7 +40,7 @@ namespace SuperGlue
 
             File.Copy(Path.Combine(Application, $"{applicationName}.dll.config"), Path.Combine(Application, $"{installerFile}.config"));
 
-            var startInfo = new ProcessStartInfo(Path.Combine(Application, installerFile), $"install -appname:{applicationName} -environment:{Environment}")
+            var startInfo = new ProcessStartInfo(Path.Combine(Application, installerFile), $"install -appname:\"{applicationName}\" -environment:{Environment}")
             {
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden,
