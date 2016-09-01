@@ -28,6 +28,8 @@ namespace SuperGlue
 
             var installerFile = Path.GetFileName(Directory.GetFiles(installerDirectory, "*.exe").FirstOrDefault() ?? "");
 
+            Console.WriteLine($"Goind to install application using installer file: {installerFile}");
+
             DirectoryCopy(installerDirectory, Application);
 
             foreach (var host in Hosts)
