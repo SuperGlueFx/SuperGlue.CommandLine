@@ -38,6 +38,8 @@ namespace SuperGlue
 
             var applicationName = GetApplicationName(Application);
 
+            File.Copy(Path.Combine(Application, $"{applicationName}.dll.config"), Path.Combine(Application, $"{installerFile}.config"));
+
             var startInfo = new ProcessStartInfo(Path.Combine(Application, installerFile), $"install -appname:{applicationName} -environment:{Environment}")
             {
                 CreateNoWindow = true,
