@@ -38,7 +38,7 @@ namespace SuperGlue
 
             var applicationName = GetApplicationName(Application, Name);
 
-            var startInfo = new ProcessStartInfo(Path.Combine(Application, installerFile), $"uninstall -appname:\"{applicationName}\"")
+            var startInfo = new ProcessStartInfo(Path.Combine(Application, installerFile), $"uninstall -servicename:\"{applicationName}\" -appname:\"{applicationName}\"")
             {
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden,

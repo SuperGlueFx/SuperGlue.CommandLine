@@ -49,7 +49,7 @@ namespace SuperGlue
 
             File.Copy(Path.Combine(Application, $"{applicationName}.dll.config"), Path.Combine(Application, $"{installerFile}.config"), true);
 
-            var arguments = $"install -appname:\"{applicationName}\" -environment:{Environment}";
+            var arguments = $"install -servicename:\"{applicationName}\" -appname:\"{applicationName}\" -environment:{Environment}";
 
             var installer = Path.Combine(Application, installerFile);
 
