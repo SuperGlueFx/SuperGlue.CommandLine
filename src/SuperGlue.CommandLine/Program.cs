@@ -212,6 +212,10 @@ namespace SuperGlue
                 .SetDefault(Environment.CurrentDirectory);
 
             parser
+                .Setup<string>('n', "name")
+                .Callback(x => command.Name = x);
+
+            parser
                 .Setup<string>('e', "environment")
                 .Callback(x => command.Environment = x)
                 .SetDefault("local");
@@ -238,6 +242,10 @@ namespace SuperGlue
                 .Setup<string>('a', "application")
                 .Callback(x => command.Application = x)
                 .SetDefault(Environment.CurrentDirectory);
+
+            parser
+                .Setup<string>('n', "name")
+                .Callback(x => command.Name = x);
 
             parser
                 .Setup<string>('h', "hosts")

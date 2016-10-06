@@ -18,6 +18,7 @@ namespace SuperGlue
         public string Installer { get; set; }
         public string Application { get; set; }
         public string Environment { get; set; }
+        public string Name { get; set; }
         public ICollection<string> Hosts { get; set; }
 
         public Task Execute()
@@ -42,7 +43,7 @@ namespace SuperGlue
             if (string.IsNullOrEmpty(installerFile))
                 return Task.CompletedTask;
 
-            var applicationName = GetApplicationName(Application);
+            var applicationName = GetApplicationName(Application, Name);
 
             Console.WriteLine($"Found application name: {applicationName}");
 
@@ -88,8 +89,11 @@ namespace SuperGlue
             return Task.CompletedTask;
         }
 
-        private static string GetApplicationName(string path)
+        private static string GetApplicationName(string path, string configuredName)
         {
+            if (!string.IsNullOrEmpty(configuredName))
+                return configuredName;
+
             var invalidPaths = new List<string>
             {
                 "bin",
