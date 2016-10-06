@@ -28,7 +28,7 @@ namespace SuperGlue
 
             var installerFile = Path.GetFileName(Directory.GetFiles(installerDirectory, "*.exe").FirstOrDefault() ?? "");
 
-            Console.WriteLine($"Goind to install application using installer file: {installerFile}");
+            Console.WriteLine($"Going to install application using installer file: {installerFile}");
 
             DirectoryCopy(installerDirectory, Application);
 
@@ -52,7 +52,7 @@ namespace SuperGlue
 
             var installer = Path.Combine(Application, installerFile);
 
-            Console.WriteLine($"Going to run installer: \"{installer}\" with arguments: {arguments}");
+            Console.WriteLine($"Going to run installer: \"{installer}\" with arguments: \"{arguments}\"");
 
             var startInfo = new ProcessStartInfo(installer, arguments)
             {
