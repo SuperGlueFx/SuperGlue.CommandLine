@@ -260,11 +260,11 @@ NUGET
     JaJo.Projects.Templating (1.0.0.34)
     SuperGlue.Configuration (1.0.0.370)
       Newtonsoft.Json
-    SuperGlue.Hosting.Aurelia (1.1.0.17)
+    SuperGlue.Hosting.Aurelia (1.1.0.19)
       SuperGlue.Configuration
-    SuperGlue.Hosting.FastCgi (1.1.0.17)
+    SuperGlue.Hosting.FastCgi (1.1.0.19)
       SuperGlue.Configuration
-    SuperGlue.Hosting.Katana (1.1.0.17)
+    SuperGlue.Hosting.Katana (1.1.0.19)
       Microsoft.Owin.SelfHost (>= 3.0.1)
       SuperGlue.Configuration
-    SuperGlue.Installers.TopShelf (1.1.0.17)
+    SuperGlue.Installers.TopShelf (1.1.0.19)
