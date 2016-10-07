@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperGlue.CommandLine", "SuperGlue.CommandLine\SuperGlue.CommandLine.csproj", "{271A8D2C-4681-4589-9C0E-3E65CDB652A1}"
 EndProject
@@ -11,16 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{7611DBCF
 		..\build.ps1 = ..\build.ps1
 		..\paket.dependencies = ..\paket.dependencies
 		..\paket.lock = ..\paket.lock
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SuperGlue.Consul", "SuperGlue.Consul", "{6234F600-6F4A-4AA2-ABF0-EA0E920D4627}"
-	ProjectSection(SolutionItems) = preProject
-		SuperGlue.Consul\paket.template = SuperGlue.Consul\paket.template
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SuperGlue.Nginx", "SuperGlue.Nginx", "{1712F54F-5DEA-47AC-B59B-5C7DE087580D}"
-	ProjectSection(SolutionItems) = preProject
-		SuperGlue.Nginx\paket.template = SuperGlue.Nginx\paket.template
 	EndProjectSection
 EndProject
 Global

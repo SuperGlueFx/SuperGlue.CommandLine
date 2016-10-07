@@ -1,8 +1,0 @@
-﻿type file
-id SuperGlue.Nginx
-version 1.0
-authors Mattias Jakobsson
-description
-        Command line for SuperGlue.Nginx
-files
-    tools/**/*.* ==> tools

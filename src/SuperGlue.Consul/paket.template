@@ -1,8 +1,0 @@
-﻿type file
-id SuperGlue.Consul
-version 1.0
-authors Mattias Jakobsson
-description
-        Command line for SuperGlue.Consul
-files
-    tools/*.* ==> tools
