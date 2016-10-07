@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -8,15 +7,16 @@ using System.Threading.Tasks;
 
 namespace SuperGlue
 {
-    public class UnInstallCommand : ICommand
+    public class AddInstallerCommand : ICommand
     {
-        public UnInstallCommand()
+        public AddInstallerCommand()
         {
             Hosts = new List<string>();
         }
 
         public string Installer { get; set; }
         public string Application { get; set; }
+        public string Environment { get; set; }
         public string Name { get; set; }
         public ICollection<string> Hosts { get; set; }
 
@@ -28,64 +28,27 @@ namespace SuperGlue
 
             var installerFile = Path.GetFileName(Directory.GetFiles(installerDirectory, "*.exe").FirstOrDefault() ?? "");
 
+            Console.WriteLine($"Going to install application using installer file: {installerFile}");
+
             DirectoryCopy(installerDirectory, Application);
 
             foreach (var host in Hosts)
+            {
                 DirectoryCopy(Path.Combine(location, $"Hosts\\{host}"), Application);
+
+                Console.WriteLine($"Installed host \"{host}\"");
+            }
 
             if (string.IsNullOrEmpty(installerFile))
                 return Task.CompletedTask;
 
             var applicationName = GetApplicationName(Application, Name);
 
-            var startInfo = new ProcessStartInfo(Path.Combine(Application, installerFile), $"uninstall -servicename:\"{applicationName}\" -appname:\"{applicationName}\"")
-            {
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                WorkingDirectory = Application,
-                UseShellExecute = false,
-                RedirectStandardError = true,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true
-            };
+            Console.WriteLine($"Found application name: {applicationName}");
 
-            var process = new Process
-            {
-                StartInfo = startInfo,
-                EnableRaisingEvents = true
-            };
-
-            process.OutputDataReceived += (x, y) => Console.WriteLine(y.Data);
-
-            if (process.Start())
-                process.WaitForExit();
+            File.Copy(Path.Combine(Application, $"{applicationName}.dll.config"), Path.Combine(Application, $"{installerFile}.config"), true);
 
             return Task.CompletedTask;
-        }
-
-        private static void DirectoryCopy(string sourceDirName, string destDirName)
-        {
-            var dir = new DirectoryInfo(sourceDirName);
-            var dirs = dir.GetDirectories();
-
-            if (!dir.Exists)
-                throw new DirectoryNotFoundException("Source directory does not exist or could not be found: " + sourceDirName);
-
-            if (!Directory.Exists(destDirName))
-                Directory.CreateDirectory(destDirName);
-
-            var files = dir.GetFiles();
-            foreach (var file in files)
-            {
-                var temppath = Path.Combine(destDirName, file.Name);
-                file.CopyTo(temppath, true);
-            }
-
-            foreach (var subdir in dirs)
-            {
-                var temppath = Path.Combine(destDirName, subdir.Name);
-                DirectoryCopy(subdir.FullName, temppath);
-            }
         }
 
         private static string GetApplicationName(string path, string configuredName)
@@ -116,6 +79,31 @@ namespace SuperGlue
 
                 if (string.IsNullOrEmpty(currentPath) || string.IsNullOrEmpty(name))
                     return "Default";
+            }
+        }
+
+        private static void DirectoryCopy(string sourceDirName, string destDirName)
+        {
+            var dir = new DirectoryInfo(sourceDirName);
+            var dirs = dir.GetDirectories();
+
+            if (!dir.Exists)
+                throw new DirectoryNotFoundException("Source directory does not exist or could not be found: " + sourceDirName);
+
+            if (!Directory.Exists(destDirName))
+                Directory.CreateDirectory(destDirName);
+
+            var files = dir.GetFiles();
+            foreach (var file in files)
+            {
+                var temppath = Path.Combine(destDirName, file.Name);
+                file.CopyTo(temppath, true);
+            }
+
+            foreach (var subdir in dirs)
+            {
+                var temppath = Path.Combine(destDirName, subdir.Name);
+                DirectoryCopy(subdir.FullName, temppath);
             }
         }
     }
