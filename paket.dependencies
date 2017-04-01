@@ -1,3 +1,4 @@
+framework: auto-detect
 source https://nuget.org/api/v2
 source https://www.myget.org/F/jajo/api/v2
 nuget FluentCommandLineParser
